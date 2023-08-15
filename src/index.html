@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="UTF-8" />
+    <title>Wait Overlay</title>
+    <link rel="stylesheet" href="index.css" />
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <p id="mode" style="display: none;">none</p>
+  </head>
+  <body id="body">
+    <div id="menu">
+      <div id="flex-container">
+        <svg width="50" height="50" id="move">
+          <rect width="50" height="50" style="fill:gray;"/>
+          <image href="move.png" height="50" width="50"/>
+        </svg>
+        
+        <button class="buttons" id="twitch" onclick="twitchSearch()">TWITCH</button>
+
+        <input type="text" id="search">
+
+        <button class="buttons" id="youtube" onclick="youtubeSearch()">YOUTUBE</button>
+
+        <button class="buttons" id="hide">HIDE</button>
+      </div>
+
+      <div id="slidecontainer">
+        <input type="range" min="20" max="100" value="100" id="slider">
+      </div>
+    </div>
+
+    <div id="twitch-embed" style="display: none;"></div>
+    <script src="https://embed.twitch.tv/embed/v1.js"></script>
+    <script type="text/javascript">
+      var player = new Twitch.Embed("twitch-embed", {
+        allowfullscreen: false,
+        autoplay: true,
+        width: "100%",
+        height: window.innerHeight - document.getElementById("menu").scrollHeight - 20,
+        channel: "chess",
+        parent: ["localhost"]
+      });
+
+      function pauseTwitch() {
+        player.pause();
+      }
+
+      function playTwitch() {
+        player.play();
+      }
+    </script>
+
+    <div id="youtube-embed" style="display: none;">
+      <iframe id="youtube-iframe" width="100%" allowfullscreen="false" allowscriptaccess="always" frameborder="0" style="display: none;"></iframe>
+      <div id="youtube-search" style="display: none;"></div>
+      <script>
+        function pauseYoutube() {
+          document.getElementById("youtube-iframe").contentWindow.postMessage('{"event":"command","func":"' + 'pauseVideo' + '","args":""}', "*");
+        }
+
+        function playYoutube() {
+          document.getElementById("youtube-iframe").contentWindow.postMessage('{"event":"command","func":"' + 'playVideo' + '","args":""}', "*");
+        }
+     </script>
+    </div>
+
+    <script src="./renderer.js" defer></script>
+  </body>
+</html>
