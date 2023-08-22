@@ -1,5 +1,3 @@
-const youtubesearchapi = require("youtube-search-api");
-
 const HIDE_BTN = document.getElementById("hide");
 var mode = null;
 
