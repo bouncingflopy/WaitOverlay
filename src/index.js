@@ -1,4 +1,4 @@
-const { app, BrowserWindow, ipcMain, Tray, globalShortcut, session } = require('electron');
+const { app, BrowserWindow, ipcMain, Tray, globalShortcut, session, BrowserView } = require('electron');
 const path = require('path');
 require("electron-reload")(__dirname)
 
@@ -73,7 +73,7 @@ const createWindow = () => {
     mainWindow.hide();
     mainWindow.webContents.executeJavaScript(`
       pauseTwitch();
-      pauseYoutube();
+      pauseKick();
     `);
   }
 
@@ -82,8 +82,8 @@ const createWindow = () => {
     mainWindow.webContents.executeJavaScript(`
       if (document.getElementById("mode").innerHTML === 'twitch') {
         playTwitch();
-      } else if (document.getElementById("mode").innerHTML === 'youtube') {
-        playYoutube();
+      } else if (document.getElementById("mode").innerHTML === 'twitch') {
+        playKick();
       }
     `);
   }
@@ -112,6 +112,10 @@ const createWindow = () => {
       show()
     }
   })
+
+  globalShortcut.register('Alt+c', () => {
+    mainWindow.webContents.executeJavaScript(`toggleTwitchChat();`);
+  })
 };
 
 // This method will be called when Electron has finished
@@ -138,3 +142,4 @@ app.on('activate', () => {
 
 // In this file you can include the rest of your app's specific main process
 // code. You can also put them in separate files and import them here.
+app.commandLine.appendSwitch('disable-site-isolation-trials')

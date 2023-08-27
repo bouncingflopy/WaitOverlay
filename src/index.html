@@ -14,14 +14,22 @@
           <rect width="50" height="50" style="fill:gray;"/>
           <image href="move.png" height="50" width="50"/>
         </svg>
-        
-        <button class="buttons" id="twitch" onclick="twitchSearch()">TWITCH</button>
 
-        <input type="text" id="search">
+        <div id="search-buttons">
+          <button class="buttons" id="twitch" onclick="twitchSearch()">
+            <img src="twitch.png" width="35" height="35">
+          </button>
 
-        <button class="buttons" id="youtube" onclick="youtubeSearch()">YOUTUBE</button>
+          <button class="buttons" id="kick" onclick="kickSearch()">
+            <img src="kick.png" width="35" height="35">
+          </button>
+          
+          <input type="text" id="search">
+        </div>
 
-        <button class="buttons" id="hide">HIDE</button>
+        <button class="buttons" id="hide">
+          <img src="hide.png" width="40" height="40">
+        </button>
       </div>
 
       <div id="slidecontainer">
@@ -29,39 +37,121 @@
       </div>
     </div>
 
-    <div id="twitch-embed" style="display: none;"></div>
-    <script src="https://embed.twitch.tv/embed/v1.js"></script>
-    <script type="text/javascript">
-      var player = new Twitch.Embed("twitch-embed", {
-        allowfullscreen: false,
-        autoplay: true,
-        width: "100%",
-        height: window.innerHeight - document.getElementById("menu").scrollHeight - 20,
-        channel: "chess",
-        parent: ["localhost"]
-      });
+    <div id="twitch-div">
+      <p id="mode-chat" style="display: none;">true</p>
 
-      function pauseTwitch() {
-        player.pause();
-      }
+      <div id="twitch-embed" style="display: none;"></div>
+      <script src="https://embed.twitch.tv/embed/v1.js"></script>
+      <script type="text/javascript">
+        var playerChat = new Twitch.Embed("twitch-embed", {
+          allowfullscreen: false,
+          autoplay: false,
+          width: "100%",
+          height: window.innerHeight - document.getElementById("menu").scrollHeight - 20,
+          channel: " ",
+          parent: ["localhost"]
+        });
+      </script>
 
-      function playTwitch() {
-        player.play();
-      }
-    </script>
-
-    <div id="youtube-embed" style="display: none;">
-      <iframe id="youtube-iframe" width="100%" allowfullscreen="false" allowscriptaccess="always" frameborder="0" style="display: none;"></iframe>
-      <div id="youtube-search" style="display: none;"></div>
-      <script>
-        function pauseYoutube() {
-          document.getElementById("youtube-iframe").contentWindow.postMessage('{"event":"command","func":"' + 'pauseVideo' + '","args":""}', "*");
+      <div id="twitch-player" style="display: none;"></div>
+      <script src= "https://player.twitch.tv/js/embed/v1.js"></script>
+      <script type="text/javascript">
+        var player = new Twitch.Player("twitch-player", {
+          allowfullscreen: false,
+          autoplay: false,
+          width: "100%",
+          height: window.innerHeight - document.getElementById("menu").scrollHeight - 20,
+          channel: " ",
+          parent: ["localhost"]
+        });
+      </script>
+      
+      <script type="text/javascript">
+        function pauseTwitch() {
+          playerChat.pause();
+          player.pause();
         }
 
-        function playYoutube() {
-          document.getElementById("youtube-iframe").contentWindow.postMessage('{"event":"command","func":"' + 'playVideo' + '","args":""}', "*");
+        function playTwitch() {
+          if (document.getElementById("mode-chat").innerHTML === "true") {
+            playerChat.play();
+          } else {
+            player.play();
+          }
         }
-     </script>
+
+        function toggleTwitchChat() {
+          if (document.getElementById("mode").innerHTML === "twitch") {
+            if (document.getElementById("mode-chat").innerHTML === "true") {
+              document.getElementById("mode-chat").innerHTML = "false";
+              playerChat.pause();
+              // playerChat.fullscreen();
+              document.getElementById("twitch-embed").style.display = 'none';
+              player.play();
+              document.getElementById("twitch-player").style.display = 'block';
+              document.getElementById("twitch-player").firstChild.src = document.getElementById("twitch-player").firstChild.src;
+            } else {
+              document.getElementById("mode-chat").innerHTML = "true";
+              player.pause();
+              // player.fullscreen();
+              document.getElementById("twitch-player").style.display = 'none';
+              playerChat.play();
+              document.getElementById("twitch-embed").style.display = 'block';
+              document.getElementById("twitch-embed").firstChild.src = document.getElementById("twitch-embed").firstChild.src;
+            }
+          }
+        }
+        
+        playerChat.addEventListener(Twitch.Embed.READY, () => {
+          if (document.getElementById("mode").innerHTML === "twitch") {
+            playTwitch();
+          } else {
+            pauseTwitch();
+          }
+        });
+
+        player.addEventListener(Twitch.Player.READY, () => {
+          if (document.getElementById("mode").innerHTML === "twitch") {
+            playTwitch();
+          } else {
+            pauseTwitch();
+          }
+        });
+      </script>
+    </div>
+
+    <div id="kick-div">
+      <iframe
+          src="https://player.kick.com/?autoplay=true&muted=false"
+          height=380
+          width="100%"
+          frameborder="0"
+          scrolling="no"
+          allowfullscreen="false"
+          id="kick-embed"
+          style="display: none;">
+      </iframe>
+      <script type="text/javascript">
+        async function pauseKick() {
+            try {
+              document.getElementById("kick-embed").contentWindow.document.getElementsByClassName("vjs-tech")[0].pause();
+            } catch {
+              await new Promise(resolve => setTimeout(resolve, 500));
+              pauseKick();
+            } finally {
+              if (!(document.getElementById("mode").innerHTML === "kick")) {
+                await new Promise(resolve => setTimeout(resolve, 500));
+                pauseKick();
+              }
+            }
+          }
+
+        function playKick() {
+          try {
+            document.getElementById("kick-embed").contentWindow.document.getElementsByClassName("vjs-tech")[0].play();
+          } catch {} finally {}
+        }
+      </script>
     </div>
 
     <script src="./renderer.js" defer></script>
