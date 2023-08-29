@@ -16,9 +16,9 @@ slider.addEventListener ('input', () => {
 })
 
 addEventListener("resize", (event) => {
-  document.getElementById("twitch-embed").firstChild.height = window.innerHeight - document.getElementById("menu").scrollHeight - 20;
-  document.getElementById("twitch-player").firstChild.height = window.innerHeight - document.getElementById("menu").scrollHeight - 20;
-  document.getElementById("kick-embed").height = window.innerHeight - document.getElementById("menu").scrollHeight - 20;
+  document.getElementById("twitch-embed").firstChild.height = window.innerHeight - document.getElementById("menu").scrollHeight - 23;
+  document.getElementById("twitch-player").firstChild.height = window.innerHeight - document.getElementById("menu").scrollHeight - 23;
+  document.getElementById("kick-embed").height = window.innerHeight - document.getElementById("menu").scrollHeight - 23;
 });
 
 function twitchSearch() {
@@ -59,7 +59,7 @@ function kickSearch() {
   document.getElementById("mode").innerHTML = 'kick';
   document.getElementById("kick-embed").style.display = "block";
   document.getElementById("kick").style.filter = "none";
-  document.getElementById("kick-embed").height = window.innerHeight - document.getElementById("menu").scrollHeight - 20;
+  document.getElementById("kick-embed").height = window.innerHeight - document.getElementById("menu").scrollHeight - 23;
 
   document.getElementById("kick-embed").src = "https://player.kick.com/" + channel + "?autoplay=true&muted=false";
 }

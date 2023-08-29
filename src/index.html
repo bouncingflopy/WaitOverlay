@@ -11,8 +11,7 @@
     <div id="menu">
       <div id="flex-container">
         <svg width="50" height="50" id="move">
-          <rect width="50" height="50" style="fill:gray;"/>
-          <image href="move.png" height="50" width="50"/>
+          <image id='drag' href="move.png" height="50" width="50"/>
         </svg>
 
         <div id="search-buttons">
@@ -27,13 +26,11 @@
           <input type="text" id="search">
         </div>
 
-        <button class="buttons" id="hide">
-          <img src="hide.png" width="40" height="40">
-        </button>
+        <button class="buttons" id="hide"></button>
       </div>
 
       <div id="slidecontainer">
-        <input type="range" min="20" max="100" value="100" id="slider">
+        <input type="range" min="20" max="100" value="100" step="0.2" id="slider">
       </div>
     </div>
 
@@ -47,7 +44,7 @@
           allowfullscreen: false,
           autoplay: false,
           width: "100%",
-          height: window.innerHeight - document.getElementById("menu").scrollHeight - 20,
+          height: window.innerHeight - document.getElementById("menu").scrollHeight - 23,
           channel: " ",
           parent: ["localhost"]
         });
@@ -60,7 +57,7 @@
           allowfullscreen: false,
           autoplay: false,
           width: "100%",
-          height: window.innerHeight - document.getElementById("menu").scrollHeight - 20,
+          height: window.innerHeight - document.getElementById("menu").scrollHeight - 23,
           channel: " ",
           parent: ["localhost"]
         });
